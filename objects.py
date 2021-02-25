@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, Integer
-from config import base, engine
+from config import base
 
 
 class Film(base):
@@ -20,7 +20,6 @@ class Actor(base):
 
 
 if __name__ == '__main__':
-    from sqlalchemy.orm import Session
-
-    session = Session(engine)
-    base.metadata.create_all(engine)
+    from crud import session_scope
+    with session_scope() as s:
+        base.metadata.create_all(s)
