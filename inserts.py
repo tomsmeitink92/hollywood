@@ -1,5 +1,5 @@
 from crud import session_scope
-from objects import Actor, Film, film_actor
+from objects import Actor, Film
 
 
 actors = [
