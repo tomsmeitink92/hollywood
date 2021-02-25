@@ -1,5 +1,14 @@
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 from config import Base
+
+
+class FilmActor(Base):
+    __tablename__ = 'film_actor'
+    film_id = Column(Integer, ForeignKey('films.id'), primary_key=True)
+    actor_id = Column(Integer, ForeignKey('actors.id'), primary_key=True)
+    actor = relationship("Actor", back_populates="films")
+    film = relationship("Film", back_populates="actors")
 
 
 class Film(Base):
@@ -9,7 +18,8 @@ class Film(Base):
     title = Column(String)
     director = Column(String)
     year = Column(Integer)
-    actor_id = Column(String)
+
+    actors = relationship("FilmActor", back_populates="film")
 
 
 class Actor(Base):
@@ -18,8 +28,9 @@ class Actor(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
 
+    films = relationship("FilmActor", back_populates="actor")
+
 
 if __name__ == '__main__':
     from config import engine
     Base.metadata.create_all(engine)
-
