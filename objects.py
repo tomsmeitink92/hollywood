@@ -3,16 +3,7 @@ from sqlalchemy.orm import relationship
 from config import Base
 
 
-# class FilmActor(Base):
-#     __tablename__ = 'film_actor'
-#
-#     id = Column(Integer, primary_key=True)
-#     film_id = Column(Integer, ForeignKey('films.id'), primary_key=True)
-#     actor_id = Column(Integer, ForeignKey('actors.id'), primary_key=True)
-#
-#     actor = relationship("Actor", backref="film_actor")
-#     film = relationship("Film", backref="film_actor")
-
+# Association table which links films to actors
 film_actor = Table(
     "film_actor",
     Base.metadata,
@@ -21,22 +12,44 @@ film_actor = Table(
 
 
 class Film(Base):
+    """
+    :param id: Unique identification number.
+    :type id: int
+    :param title: Title of the film.
+    :type title: str
+    :param director: Name of the director of the film.
+    :type director: str
+    :param year: Publication year of the film.
+    :type year: str
+    """
+    # Table name as presented in PostgreSQL
     __tablename__ = "films"
 
+    # Field names
     id = Column(Integer, primary_key=True)
     title = Column(String, unique=True)
     director = Column(String)
     year = Column(Integer)
 
+    # Relationship tables
     actors = relationship("Actor", secondary=film_actor, back_populates="films")
 
 
 class Actor(Base):
+    """
+    :param id: Unique identification number.
+    :type id: int
+    :param name: Name of the actor.
+    :type name: str
+    """
+    # Table name as presented in PostgreSQL
     __tablename__ = "actors"
 
+    # Field names
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
 
+    # Relationship tables
     films = relationship("Film", secondary=film_actor, back_populates="actors")
 
 
