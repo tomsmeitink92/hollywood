@@ -13,5 +13,5 @@ db = getenv("database")
 
 db_string = f"postgres://{usr}:{pwd}@{host}/{db}"
 engine = create_engine(db_string)
-base = declarative_base()
+Base = declarative_base()
 session = Session(engine)

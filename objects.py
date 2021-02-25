@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, Integer
-from config import base
+from config import Base
 
 
-class Film(base):
+class Film(Base):
     __tablename__ = "films"
 
     id = Column(Integer, primary_key=True)
@@ -12,7 +12,7 @@ class Film(base):
     actor_id = Column(String)
 
 
-class Actor(base):
+class Actor(Base):
     __tablename__ = "actors"
 
     id = Column(Integer, primary_key=True)
@@ -21,5 +21,5 @@ class Actor(base):
 
 if __name__ == '__main__':
     from config import engine
-    base.metadata.create_all(engine)
+    Base.metadata.create_all(engine)
 
