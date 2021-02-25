@@ -1,5 +1,5 @@
 from crud import session_scope
-from objects import Actor, Film
+from objects import Actor, Film, film_actor
 
 
 actors = [
@@ -11,6 +11,9 @@ films = [
     Film(title="Se7en", director="David Fincher", year=1995),
     Film(title="Fight Club", director="David Fincher", year=1999)
 ]
+for actor in actors:
+    films[0].actors.append(actor)
+films[1].actors.append(actors[0])
 
 
 with session_scope() as s:
