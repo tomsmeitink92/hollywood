@@ -20,6 +20,6 @@ class Actor(base):
 
 
 if __name__ == '__main__':
-    from crud import session_scope
-    with session_scope() as s:
-        base.metadata.create_all(s)
+    from config import engine
+    base.metadata.create_all(engine)
+
