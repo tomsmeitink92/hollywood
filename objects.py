@@ -4,8 +4,8 @@ from config import Base
 
 
 # Association table which links films to actors
-film_actor = Table(
-    "film_actor",
+films_actors_association = Table(
+    "films_actors",
     Base.metadata,
     Column("film_id", Integer, ForeignKey("films.id")),
     Column("actor_id", Integer, ForeignKey("actors.id")))
@@ -29,10 +29,39 @@ class Film(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String, unique=True)
     director = Column(String)
-    year = Column(Integer)
+    release_year = Column(Integer)
+    genre = Column(String)
 
     # Relationship tables
-    actors = relationship("Actor", secondary=film_actor, back_populates="films")
+    actors = relationship(
+        "Actor",
+        secondary=films_actors_association,
+        back_populates="films"
+    )
+
+    def __init__(self, title: str, director: str, release_year: int, genre: str):
+        self.title = title
+        self.director = director
+        self.release_year = release_year
+        self.genre = genre
+
+    def __eq__(self, other):
+        return self.title == other.title
+
+    def __hash__(self):
+        return hash(self.title)
+
+    @property
+    def release_year(self):
+        return self._release_year
+
+    @release_year.setter
+    def release_year(self, value):
+        if isinstance(value, str):
+            if "-" in value:
+                self._release_year = value.split("_")[0]
+        elif isinstance(value, int):
+            self._release_year = value
 
 
 class Actor(Base):
@@ -50,7 +79,20 @@ class Actor(Base):
     name = Column(String, unique=True)
 
     # Relationship tables
-    films = relationship("Film", secondary=film_actor, back_populates="actors")
+    films = relationship(
+        "Film",
+        secondary=films_actors_association,
+        back_populates="actors"
+    )
+
+    def __init__(self, name: str):
+        self.name = name
+
+    def __eq__(self, other):
+        return self.name == other.name
+
+    def __hash__(self):
+        return hash(self.name)
 
 
 if __name__ == '__main__':

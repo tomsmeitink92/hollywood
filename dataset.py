@@ -15,7 +15,7 @@ def load_data():
             data.drop(columns=column, errors="ignore", inplace=True)
         return data
 
-    return pd.concat(load(name) for name in wb.sheetnames)
+    return pd.concat(load(name).assign(genre=name.capitalize()) for name in wb.sheetnames)
 
 
 if __name__ == "__main__":
