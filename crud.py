@@ -1,3 +1,5 @@
+import warnings
+import sqlalchemy.exc
 from contextlib import contextmanager
 from config import session
 
@@ -8,6 +10,12 @@ def session_scope():
     try:
         yield session
         session.commit()
+    except sqlalchemy.exc.IntegrityError as e:
+        session.rollback()
+        if "psycopg2.errors.UniqueViolation" in f"{e}":
+            warnings.warn(f"{e}")
+        else:
+            raise
     except Exception:
         session.rollback()
         raise
