@@ -70,8 +70,7 @@ class Film(Base):
     @release_year.setter
     def release_year(self, value):
         if isinstance(value, str):
-            if "-" in value:
-                self._release_year = value.split("_")[0]
+            self._release_year = int(value[:4])
         elif isinstance(value, int):
             self._release_year = value
 
