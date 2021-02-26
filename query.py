@@ -2,9 +2,9 @@ from sqlalchemy import func, text
 from models import Actor, Film, Director
 from crud import session_scope
 
-# Regular join query
+# Regular join query: Who played the leading roles in Goodfellas?
 with session_scope() as s:
-    results = s.query(Film, Actor).join(Actor, Film.actors).filter(Film.title == "Fight Club")
+    results = s.query(Film, Actor).join(Actor, Film.actors).filter(Film.title == "Goodfellas")
     for film, actor in results:
         print(film.title, actor.name)
 
