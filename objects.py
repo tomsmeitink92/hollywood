@@ -8,7 +8,16 @@ films_actors_association = Table(
     "films_actors",
     Base.metadata,
     Column("film_id", Integer, ForeignKey("films.id")),
-    Column("actor_id", Integer, ForeignKey("actors.id")))
+    Column("actor_id", Integer, ForeignKey("actors.id"))
+)
+
+# Association table which links films to directors
+films_directors_association = Table(
+    "films_directors",
+    Base.metadata,
+    Column("film_id", Integer, ForeignKey("films.id")),
+    Column("director_id", Integer, ForeignKey("directors.id"))
+)
 
 
 class Film(Base):
@@ -28,7 +37,6 @@ class Film(Base):
     # Field names
     id = Column(Integer, primary_key=True)
     title = Column(String, unique=True)
-    director = Column(String)
     release_year = Column(Integer)
     genre = Column(String)
 
@@ -38,10 +46,14 @@ class Film(Base):
         secondary=films_actors_association,
         back_populates="films"
     )
+    directors = relationship(
+        "Director",
+        secondary=films_directors_association,
+        back_populates="films"
+    )
 
-    def __init__(self, title: str, director: str, release_year: int, genre: str):
+    def __init__(self, title: str, release_year: int, genre: str):
         self.title = title
-        self.director = director
         self.release_year = release_year
         self.genre = genre
 
@@ -86,6 +98,28 @@ class Actor(Base):
     )
 
     def __init__(self, name: str):
+        self.name = name
+
+    def __eq__(self, other):
+        return self.name == other.name
+
+    def __hash__(self):
+        return hash(self.name)
+
+
+class Director(Base):
+    __tablename__ = "directors"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, unique=True)
+
+    films = relationship(
+        "Film",
+        secondary=films_directors_association,
+        back_populates="directors"
+    )
+
+    def __init__(self, name):
         self.name = name
 
     def __eq__(self, other):
