@@ -1,5 +1,5 @@
 from sqlalchemy import func
-from objects import Actor, Film
+from models import Actor, Film
 from crud import session_scope
 
 # Regular join query

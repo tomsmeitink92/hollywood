@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Integer, ForeignKey, Table
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 from config import Base
 
@@ -37,7 +38,7 @@ class Film(Base):
     # Field names
     id = Column(Integer, primary_key=True)
     title = Column(String, unique=True)
-    release_year = Column(Integer)
+    release_year = Column(Integer, nullable=False)
     genre = Column(String)
 
     # Relationship tables
@@ -62,17 +63,6 @@ class Film(Base):
 
     def __hash__(self):
         return hash(self.title)
-
-    @property
-    def release_year(self):
-        return self._release_year
-
-    @release_year.setter
-    def release_year(self, value):
-        if isinstance(value, str):
-            self._release_year = int(value[:4])
-        elif isinstance(value, int):
-            self._release_year = value
 
 
 class Actor(Base):
